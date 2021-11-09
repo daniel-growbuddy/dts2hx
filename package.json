@@ -17,14 +17,14 @@
     "url": "https://github.com/haxiomic/dts2hx"
   },
   "scripts": {
-    "prepare": "haxe build.hxml",
+    "prepare": "./haxetoolkit/haxe build.hxml",
     "test": "cd test && ./run-all.sh"
   },
   "homepage": "https://github.com/haxiomic/dts2hx",
   "author": "haxiomic",
   "license": "ISC",
   "dependencies": {
-    "typescript": "3.7.4"
+    "typescript": "4.1.4"
   },
   "devDependencies": {
     "@types/node": "11.11.3"

@@ -5,3 +5,5 @@ externs/
 .haxelib/
 scratch.*
 *.tgz
+haxetoolkit/
+/haxetoolkit/

@@ -15,6 +15,7 @@ using Lambda;
 	public inline function has(item: T) {
 		return this.indexOf(item) != -1;
 	}
+	
 
 	public inline function add(item: T) {
 		if (!has(item)) {

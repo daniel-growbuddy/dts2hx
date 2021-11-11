@@ -52,6 +52,7 @@ class Main {
 	static function main() {
 		Console.warnPrefix = '<b,yellow>> Warning:</b> ';
 		Console.errorPrefix = '<b,red>> Error:</b> ';
+		
 
 		var userArgs = Node.process.argv.slice(2);
 

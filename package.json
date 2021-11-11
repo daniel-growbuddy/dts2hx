@@ -17,7 +17,7 @@
     "url": "https://github.com/daniel-growbuddy/dts2hx"
   },
   "scripts": {
-    "prepare": "./haxetoolkit/haxe build.hxml",
+    "prepare": "haxe build.hxml",
     "test": "cd test && ./run-all.sh"
   },
   "homepage": "https://github.com/haxiomic/dts2hx",

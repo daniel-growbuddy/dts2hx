@@ -1,7 +1,7 @@
 package tool;
 
-import typescript.ts.Symbol;
-import typescript.ts.InternalSymbolName;
+import typescript.Symbol;
+import typescript.InternalSymbolName;
 import haxe.macro.Expr.Position;
 import haxe.macro.Expr.MetadataEntry;
 import haxe.ds.ReadOnlyArray;

@@ -1,16 +1,16 @@
 package tool;
 
 import ds.OnceOnlyQueue;
-import typescript.ts.PackageId;
-import typescript.ts.Identifier;
-import typescript.ts.Statement;
-import typescript.ts.InternalSymbolName;
-import typescript.ts.FileReference;
-import typescript.ts.SourceFile;
-import typescript.Ts;
-import typescript.ts.CompilerHost;
-import typescript.ts.Program;
-import typescript.ts.Symbol;
+import typescript.PackageId;
+import typescript.Identifier;
+import typescript.Statement;
+import typescript.InternalSymbolName;
+import typescript.FileReference;
+import typescript.SourceFile;
+import Typescript;
+import typescript.CompilerHost;
+import typescript.Program;
+import typescript.Symbol;
 using TsInternal;
 using tool.TsSymbolTools;
 using StringTools;
@@ -21,10 +21,10 @@ class TsProgramTools {
 	static public function getAllDiagnostics(program: Program) {
 		return program.getGlobalDiagnostics()
 			.concat(program.getOptionsDiagnostics())
-			.concat(program.getSemanticDiagnostics())
-			.concat(program.getSyntacticDiagnostics())
-			.concat(program.getDeclarationDiagnostics())
-			.concat(program.getConfigFileParsingDiagnostics());
+			.concat((cast program.getSemanticDiagnostics() : Array<typescript.Diagnostic>))
+			.concat((cast program.getSyntacticDiagnostics() : Array<typescript.Diagnostic>))
+			.concat((cast program.getDeclarationDiagnostics() : Array<typescript.Diagnostic>))
+			.concat((cast program.getConfigFileParsingDiagnostics() : Array<typescript.Diagnostic>));
 	}
 
 	static public function isAmbientModule(program: Program, moduleName: String) {
@@ -53,7 +53,7 @@ class TsProgramTools {
 
 		for (sourceFile in sourceFiles) {
 			walkReferencedSourceFiles(program, sourceFile, host, false, (sourceFile) -> {
-				var referenceInfo = Ts.preProcessFile(sourceFile.text);
+				var referenceInfo = Typescript.preProcessFile(sourceFile.text);
 
 				var externalTypeReferences =
 					referenceInfo.typeReferenceDirectives
@@ -64,7 +64,7 @@ class TsProgramTools {
 					);
 
 				for (typeReference in externalTypeReferences) {
-					var result = Ts.resolveTypeReferenceDirective(typeReference.fileName, sourceFile.fileName, compilerOptions, host);
+					var result = Typescript.resolveTypeReferenceDirective(typeReference.fileName, sourceFile.fileName, compilerOptions, host);
 					if (result.resolvedTypeReferenceDirective != null) {
 						if (result.resolvedTypeReferenceDirective.packageId != null) {
 							recordDependency(result.resolvedTypeReferenceDirective.packageId);
@@ -105,7 +105,7 @@ class TsProgramTools {
 		var moduleAugmentations = TsInternal.getSourceFileModuleAugmentations(sourceFile);
 		var globalAugmentations = new Array<Symbol>();
 		for (moduleAugmentation in moduleAugmentations) {
-			if (Ts.isIdentifier(moduleAugmentation)) {
+			if (Typescript.isIdentifier(moduleAugmentation)) {
 				var ident: Identifier = cast moduleAugmentation;
 				var identSymbol = tc.getSymbolAtLocation(ident);
 				if (identSymbol != null && identSymbol.escapedName == InternalSymbolName.Global) {
@@ -169,7 +169,7 @@ class TsProgramTools {
 			return;
 		}
 
-		var referenceInfo = Ts.preProcessFile(sourceFile.text);
+		var referenceInfo = Typescript.preProcessFile(sourceFile.text);
 		
 		var localFileReferences = referenceInfo.referencedFiles;
 
@@ -204,7 +204,7 @@ class TsProgramTools {
 
 		for (sourceFile in program.getSourceFiles()) {
 			var lookupName = FileTools.withRelativePrefix(removeTsExtension(sourceFile.fileName));
-			var result = Ts.resolveModuleName(lookupName, moduleSearchPath + '/.', compilerOptions, host);
+			var result = Typescript.resolveModuleName(lookupName, moduleSearchPath + '/.', compilerOptions, host);
 			if (result.resolvedModule != null) {
 
 				if (result.resolvedModule.packageId != null) {
@@ -230,7 +230,7 @@ class TsProgramTools {
 		while (true) {
 			var packageName = packageNames.dequeue();
 			if (packageName == null) break;
-			var result = Ts.resolveModuleName(packageName, moduleSearchPath + '/.', compilerOptions, host);
+			var result = Typescript.resolveModuleName(packageName, moduleSearchPath + '/.', compilerOptions, host);
 			if (result.resolvedModule != null) {
 				var defaultTypesSourceFile = program.getSourceFile(result.resolvedModule.resolvedFileName);
 				if (defaultTypesSourceFile != null) {

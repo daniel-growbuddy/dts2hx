@@ -1,15 +1,15 @@
 package tool;
 
-import typescript.ts.NodeFlags;
-import typescript.ts.TypeParameterDeclaration;
-import typescript.ts.SourceFile;
-import typescript.ts.Identifier;
-import typescript.ts.Node;
-import typescript.ts.EntityName;
-import typescript.ts.QualifiedName;
-import typescript.ts.DeclarationName;
-import typescript.ts.SyntaxKind;
-import typescript.Ts;
+import typescript.NodeFlags;
+import typescript.TypeParameterDeclaration;
+import typescript.SourceFile;
+import typescript.Identifier;
+import typescript.Node;
+import typescript.EntityName;
+import typescript.QualifiedName;
+import typescript.DeclarationName;
+import typescript.SyntaxKind;
+import Typescript;
 
 using tool.HaxeTools;
 
@@ -36,7 +36,7 @@ class TsSyntaxTools {
 	
 	// translated from https://github.com/microsoft/TypeScript/blob/3340142dda47f52af55144130304eef19a97ec31/src/compiler/utilities.ts#L1064
 	static public function isVarConst(node: Node) {
-		return Ts.getCombinedNodeFlags(node) & NodeFlags.Const != 0;
+		return Typescript.getCombinedNodeFlags(node) & NodeFlags.Const != 0;
 	}
 
 }

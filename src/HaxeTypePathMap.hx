@@ -1,9 +1,9 @@
 import typemap.TypeMap;
 import haxe.io.Path;
-import typescript.ts.Program;
-import typescript.ts.Symbol;
-import typescript.ts.SymbolFlags;
-import typescript.ts.TypeChecker;
+import typescript.Program;
+import typescript.Symbol;
+import typescript.SymbolFlags;
+import typescript.TypeChecker;
 
 using Lambda;
 using tool.HaxeTools;

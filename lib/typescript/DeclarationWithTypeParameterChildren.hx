@@ -1,0 +1,3 @@
+package typescript;
+
+typedef DeclarationWithTypeParameterChildren = ts.AnyOf19<JSDocTemplateTag, FunctionDeclaration, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, ConstructorDeclaration, FunctionExpression, ArrowFunction, CallSignatureDeclaration, ConstructSignatureDeclaration, MethodSignature, IndexSignatureDeclaration, FunctionTypeNode, ConstructorTypeNode, JSDocFunctionType, ClassDeclaration, ClassExpression, InterfaceDeclaration, TypeAliasDeclaration>;

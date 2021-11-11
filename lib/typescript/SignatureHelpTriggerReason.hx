@@ -1,0 +1,3 @@
+package typescript;
+
+typedef SignatureHelpTriggerReason = ts.AnyOf3<SignatureHelpInvokedReason, SignatureHelpCharacterTypedReason, SignatureHelpRetriggeredReason>;

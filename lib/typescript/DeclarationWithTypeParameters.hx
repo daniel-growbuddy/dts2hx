@@ -1,0 +1,3 @@
+package typescript;
+
+typedef DeclarationWithTypeParameters = ts.AnyOf22<JSDocTypedefTag, JSDocTemplateTag, FunctionDeclaration, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, ConstructorDeclaration, FunctionExpression, ArrowFunction, CallSignatureDeclaration, ConstructSignatureDeclaration, MethodSignature, IndexSignatureDeclaration, FunctionTypeNode, ConstructorTypeNode, JSDocFunctionType, ClassDeclaration, ClassExpression, InterfaceDeclaration, TypeAliasDeclaration, JSDocCallbackTag, JSDocSignature>;

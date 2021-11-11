@@ -3,39 +3,40 @@ import ds.Set;
 import haxe.macro.Expr;
 import tool.FileTools;
 import tool.TsSyntaxTools;
-import typescript.Ts;
-import typescript.ts.CompilerHost;
-import typescript.ts.CompilerOptions;
-import typescript.ts.Declaration;
-import typescript.ts.GenericType;
-import typescript.ts.InterfaceType;
-import typescript.ts.IntersectionType;
-import typescript.ts.Modifier;
-import typescript.ts.ModifiersArray;
-import typescript.ts.Node;
-import typescript.ts.NodeBuilderFlags;
-import typescript.ts.NumberLiteralType;
-import typescript.ts.ObjectFlags;
-import typescript.ts.ObjectType;
-import typescript.ts.PackageId;
-import typescript.ts.ParameterDeclaration;
-import typescript.ts.Program;
-import typescript.ts.ResolvedModuleFull;
-import typescript.ts.Signature;
-import typescript.ts.Symbol;
-import typescript.ts.SymbolFlags;
-import typescript.ts.SyntaxKind;
-import typescript.ts.TupleType;
-import typescript.ts.TupleTypeReference;
-import typescript.ts.TypeAliasDeclaration;
-import typescript.ts.TypeChecker;
-import typescript.ts.TypeFlags;
-import typescript.ts.TypeFormatFlags;
-import typescript.ts.TypeNode;
-import typescript.ts.TypeParameter;
-import typescript.ts.TypeParameterDeclaration;
-import typescript.ts.TypeReference;
-import typescript.ts.UnionType;
+import Typescript;
+import typescript.CompilerHost;
+import typescript.CompilerOptions;
+import typescript.Declaration;
+import typescript.GenericType;
+import typescript.InterfaceType;
+import typescript.IntersectionType;
+import typescript.Modifier;
+import typescript.ModifierToken;
+import typescript.ModifiersArray;
+import typescript.Node;
+import typescript.NodeBuilderFlags;
+import typescript.NumberLiteralType;
+import typescript.ObjectFlags;
+import typescript.ObjectType;
+import typescript.PackageId;
+import typescript.ParameterDeclaration;
+import typescript.Program;
+import typescript.ResolvedModuleFull;
+import typescript.Signature;
+import typescript.Symbol;
+import typescript.SymbolFlags;
+import typescript.SyntaxKind;
+import typescript.TupleType;
+import typescript.TupleTypeReference;
+import typescript.TypeAliasDeclaration;
+import typescript.TypeChecker;
+import typescript.TypeFlags;
+import typescript.TypeFormatFlags;
+import typescript.TypeNode;
+import typescript.TypeParameter;
+import typescript.TypeParameterDeclaration;
+import typescript.TypeReference;
+import typescript.UnionType;
 
 using Lambda;
 using StringTools;
@@ -47,7 +48,7 @@ using tool.TsProgramTools;
 using tool.TsSymbolTools;
 using tool.TsTypeTools;
 
-private typedef TsType = typescript.ts.Type;
+private typedef TsType = typescript.Type_;
 private typedef Options = {
 	locationComments: Bool,
 	allowIntersectionRasterization: Bool,
@@ -143,7 +144,7 @@ class ConverterContext {
 		// we make the moduleSearchPath absolute to work around an issue in resolveModuleName
 		moduleSearchPath = sys.FileSystem.absolutePath(moduleSearchPath);
 		this.moduleSearchPath = moduleSearchPath;
-		this.host = Ts.createCompilerHost(compilerOptions);
+		this.host = Typescript.createCompilerHost(compilerOptions);
 
 		// this will be used as the argument to require()
 		this.normalizedInputModuleName = inline inputModuleName.normalizeModuleName();
@@ -152,7 +153,7 @@ class ConverterContext {
 		Log.log('moduleSearchPath: <b>"${this.moduleSearchPath}"</>');
 
 		// resolve input module (as entry-point)
-		var result = Ts.resolveModuleName(inputModuleName, moduleSearchPath + '/.', compilerOptions, host);
+		var result = Typescript.resolveModuleName(inputModuleName, moduleSearchPath + '/.', compilerOptions, host);
 		if (result.resolvedModule == null) {
 			var failedLookupLocations: Array<String> = Reflect.field(result, 'failedLookupLocations'); // @internal field
 			Log.error('Failed to find typescript for module <b>"${inputModuleName}"</b>. Searched the following paths:<dim>\n\t${failedLookupLocations.join('\n\t')}</>');
@@ -165,7 +166,7 @@ class ConverterContext {
 			this.packageName = inline inputModule.packageId.name.normalizeModuleName();
 
 			if (inputModule.packageId.name != inputModuleName) {
-				var result = Ts.resolveModuleName(this.packageName, moduleSearchPath + '/.', compilerOptions, host);
+				var result = Typescript.resolveModuleName(this.packageName, moduleSearchPath + '/.', compilerOptions, host);
 				if (result.resolvedModule == null) {
 					var failedLookupLocations: Array<String> = Reflect.field(result, 'failedLookupLocations'); // @internal field
 					Log.error('Root package for <b>$inputModuleName</> was <b>${this.packageName}</> but this module could not be resolved. Searched the following paths:<dim>\n\t${failedLookupLocations.join('\n\t')}</>');
@@ -181,7 +182,7 @@ class ConverterContext {
 		if (packageRootModule != null) {
 			inputSourcePaths.unshift(packageRootModule.resolvedFileName);
 		}
-		this.program = Ts.createProgram(inputSourcePaths, compilerOptions, host);
+		this.program = Typescript.createProgram(inputSourcePaths, compilerOptions, host);
 		this.tc = program.getTypeChecker();
 
 		Log.diagnostics(program.getAllDiagnostics());
@@ -493,7 +494,7 @@ class ConverterContext {
 					access,
 					declaration,
 					symbol.getConstructorSignatures(tc),
-					callSignatures,
+					(cast callSignatures:Array<typescript.Signature>),
 					indexSignatures,
 					classMembers,
 					fundamentalTypePath.name
@@ -570,11 +571,11 @@ class ConverterContext {
 
 					// given constructor type cannot merge with class, we don't expect an existing new signature
 					// (and constructor type new signature takes precedence, not overload, over a class new signature if merged with a type-alias to class)
-					var newField = newFieldFromSignatures(constructSignatures, symbol, access, constructorTypeDeclaration);
+					var newField = newFieldFromSignatures((cast constructSignatures : Array<typescript.Signature>), symbol, access, constructorTypeDeclaration);
 					hxModule.fields.unshift(newField);
 
 					if (callSignatures.length > 0) {
-						var callField = functionFieldFromCallSignatures(selfCallFunctionName, callSignatures, symbol, access, constructorTypeDeclaration);
+						var callField = functionFieldFromCallSignatures(selfCallFunctionName, (cast callSignatures : Array<typescript.Signature>), symbol, access, constructorTypeDeclaration);
 						callField.enableAccess(AStatic);
 						hxModule.fields.push(callField);
 					}
@@ -668,7 +669,7 @@ class ConverterContext {
 				access,
 				declaration,
 				[],
-				callSignatures,
+				(cast callSignatures:Array<Signature>),
 				tc.getIndexSignaturesOfType(declaredType),
 				declaredMembers,
 				typePath.name
@@ -729,7 +730,7 @@ class ConverterContext {
 			// type symbol is a function, make a @:selfCall field
 			var tsType = getTsTypeOfField(symbol);
 			var signatures = tc.getSignaturesOfType(tc.getNonNullableType(tsType), Call);
-			var selfCallStatic = functionFieldFromCallSignatures('call', signatures, symbol, access, declaration);
+			var selfCallStatic = functionFieldFromCallSignatures('call', (cast signatures:Array<typescript.Signature>), symbol, access, declaration);
 			selfCallStatic.enableAccess(AStatic);
 			fields.push(selfCallStatic);
 		} else if (
@@ -760,7 +761,7 @@ class ConverterContext {
 					// it's possible for the variable to have a function type, in which case we make it a regular selfCall (same as above)
 					var tsType = getTsTypeOfField(symbol);
 					var signatures = tc.getSignaturesOfType(tc.getNonNullableType(tsType), Call);
-					var selfCallStatic = functionFieldFromCallSignatures('call', signatures, symbol, access, declaration);
+					var selfCallStatic = functionFieldFromCallSignatures('call', (cast signatures:Array<typescript.Signature>), symbol, access, declaration);
 					selfCallStatic.enableAccess(AStatic);
 					fields.push(selfCallStatic);
 			}
@@ -1257,7 +1258,7 @@ class ConverterContext {
 				Then to use overloads, you can do, `x.call(3)` and this compiles to `x(3)`
 			**/
 			if (callSignatures.length > 0) {
-				fields.push(functionFieldFromCallSignatures(selfCallFunctionName, callSignatures, moduleSymbol, accessContext, enclosingDeclaration));
+				fields.push(functionFieldFromCallSignatures(selfCallFunctionName, (cast callSignatures : Array<Signature>), moduleSymbol, accessContext, enclosingDeclaration));
 			}
 
 			// add properties
@@ -1607,7 +1608,7 @@ class ConverterContext {
 				if (isNullable) {
 					isOptional = true;
 				}
-				kindFromFunctionSignatures(callSignatures);
+				kindFromFunctionSignatures((cast callSignatures : Array<typescript.Signature>));
 			} else {
 				// variable field
 				if (baseDeclaration != null) switch baseDeclaration.kind {
@@ -1639,7 +1640,7 @@ class ConverterContext {
 
 			var nullFreeTsType = tc.getNonNullableType(tsType);
 			var signatures = tc.getSignaturesOfType(nullFreeTsType, Call);
-			kindFromFunctionSignatures(signatures);
+			kindFromFunctionSignatures((cast signatures:Array<typescript.Signature>));
 		} else if (symbol.flags & SymbolFlags.EnumMember != 0) {
 
 			var parent = symbol.getSymbolParent();
@@ -1681,16 +1682,16 @@ class ConverterContext {
 		// constructor declarations should not have type parameters (see #74)
 		// we leave _ConstructSignatureDeclaration_ untouched because these can have type parameters (although this isn't perfect – see WeakMap in lib.es2015.collection.d.ts)
 		var signatureDeclarationNode = signature.getDeclaration();
-		var isConstructorDeclaration = signatureDeclarationNode != null && Ts.isConstructorDeclaration(signatureDeclarationNode);
+		var isConstructorDeclaration = signatureDeclarationNode != null && Typescript.isConstructorDeclaration(signatureDeclarationNode);
 
 		var hxTypeParams = if (signature.typeParameters != null && !isConstructorDeclaration) {
 			signature.typeParameters.map(t -> typeParamDeclFromTsTypeParameter(t, moduleSymbol, accessContext, enclosingDeclaration));
 		} else [];
 
 		var hxParameters = if (signature.parameters != null ) tc.getExpandedParameters(signature).map(s -> {
-			var parameterDeclaration: Null<ParameterDeclaration> = cast s.valueDeclaration;
-			var isOptional = parameterDeclaration != null && tc.isOptionalParameter(parameterDeclaration);
-			var isRest = parameterDeclaration != null && parameterDeclaration.dotDotDotToken != null;
+			var parameterDeclaration: ts.AnyOf3<typescript.ElementAccessExpression, typescript.PropertyAccessExpression, typescript.EnumMember> = cast s.valueDeclaration;
+			var isOptional = parameterDeclaration != null && tc.isOptionalParameter(cast s.valueDeclaration);
+			var isRest = parameterDeclaration != null && (cast parameterDeclaration:ParameterDeclaration).dotDotDotToken != null;
 			// getExpandedParameters() can create transient symbols with no declaration, but they do have a .type field
 			var tsType = parameterDeclaration != null ? tc.getTypeOfSymbolAtLocation(s, parameterDeclaration) : untyped s.type;
 
@@ -1767,7 +1768,7 @@ class ConverterContext {
 	function accessFromModifiers(modifiers: ModifiersArray, ?logSymbol: Symbol): Set<Access> {
 		var access = new Array<Access>();
 		for (modifier in (cast modifiers: Array<Modifier>)) {
-			switch modifier.kind {
+			switch (cast modifier: ModifierToken<Dynamic>).kind {
 				case SyntaxKind.AbstractKeyword:
 					Log.warn('`abstract` modifier not handled', logSymbol);
 				case SyntaxKind.AsyncKeyword:
@@ -1788,7 +1789,7 @@ class ConverterContext {
 				case SyntaxKind.StaticKeyword:
 					access.push(AStatic);
 				default:
-					Log.warn('Unhandled modifier kind <b>${TsSyntaxTools.getSyntaxKindName(modifier.kind)}</b>', logSymbol);
+					Log.warn('Unhandled modifier kind <b>${TsSyntaxTools.getSyntaxKindName((cast modifier: ModifierToken<Dynamic>).kind)}</b>', logSymbol);
 			}
 		}
 		return new Set(access);

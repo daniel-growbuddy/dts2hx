@@ -1,33 +1,33 @@
 package tool;
 
-import typescript.ts.__String;
-import typescript.ts.SyntaxKind;
-import typescript.ts.TypeParameterDeclaration;
-import typescript.ts.ExpressionWithTypeArguments;
+import typescript.__String;
+import typescript.SyntaxKind;
+import typescript.TypeParameterDeclaration;
+import typescript.ExpressionWithTypeArguments;
 import haxe.DynamicAccess;
 import haxe.ds.ReadOnlyArray;
-import typescript.Ts;
-import typescript.ts.ClassDeclaration;
-import typescript.ts.Declaration;
-import typescript.ts.HeritageClause;
-import typescript.ts.InterfaceDeclaration;
-import typescript.ts.InternalSymbolName;
-import typescript.ts.Signature;
-import typescript.ts.Symbol;
-import typescript.ts.SymbolFlags;
-import typescript.ts.TypeChecker;
+import Typescript;
+import typescript.ClassDeclaration;
+import typescript.Declaration;
+import typescript.HeritageClause;
+import typescript.InterfaceDeclaration;
+import typescript.InternalSymbolName;
+import typescript.Signature;
+import typescript.Symbol;
+import typescript.SymbolFlags;
+import typescript.TypeChecker;
 
 using Lambda;
 using TsInternal;
 using tool.HaxeTools;
 
-typedef TsType = typescript.ts.Type;
+typedef TsType = typescript.Type_;
 
 @:nullSafety
 class TsSymbolTools {
 
 	public static function getId(symbol: Symbol) {
-		return Std.int(Ts.getSymbolId(symbol));
+		return Std.int(Typescript.getSymbolId(symbol));
 	}
 
 	/**
@@ -57,7 +57,7 @@ class TsSymbolTools {
 	public static function isSourceFileSymbol(symbol: Symbol): Bool {
 		return (symbol.flags & SymbolFlags.Module != 0) &&
 				symbol.valueDeclaration != null &&
-				Ts.isSourceFile(symbol.valueDeclaration);
+		Typescript.isSourceFile(symbol.valueDeclaration);
 	}
 
 	/**
@@ -158,7 +158,7 @@ class TsSymbolTools {
 	**/
 	public static function getClassExtendsType(tc: TypeChecker, symbol: Symbol): Null<TsType> {
 		// determine super type (if class declaration)
-		var classDeclaration: Null<ClassDeclaration> = symbol.valueDeclaration != null && Ts.isClassDeclaration(symbol.valueDeclaration) ? cast symbol.valueDeclaration : null;
+		var classDeclaration: Null<ClassDeclaration> = symbol.valueDeclaration != null && Typescript.isClassDeclaration(symbol.valueDeclaration) ? cast symbol.valueDeclaration : null;
 
 		if (classDeclaration != null && classDeclaration.heritageClauses != null) {
 			// classes can only extend one class in TypeScript
@@ -276,7 +276,7 @@ class TsSymbolTools {
 
 	static public function getCallSignatures(symbol: Symbol, tc: TypeChecker): Array<Signature> {
 		var symbols = getMembers(symbol).filter(s -> s.flags & SymbolFlags.Signature != 0 && s.escapedName == InternalSymbolName.Call);
-		var declarations = symbols.map(s -> getDeclarationsArray(s).filter(d -> Ts.isCallSignatureDeclaration(d))).flatten();
+		var declarations = symbols.map(s -> getDeclarationsArray(s).filter(d -> Typescript.isCallSignatureDeclaration(d))).flatten();
 		var signatures = declarations.map(d -> tc.getSignatureFromDeclaration(cast d));
 		return cast signatures.filter(s -> s != null);
 	}
@@ -286,14 +286,14 @@ class TsSymbolTools {
 	**/
 	static public function getConstructSignatures(symbol: Symbol, tc: TypeChecker): Array<Signature> {
 		var symbols = getMembers(symbol).filter(s -> s.flags & SymbolFlags.Signature != 0 && s.escapedName == InternalSymbolName.New);
-		var declarations = symbols.map(s -> getDeclarationsArray(s).filter(d -> Ts.isConstructSignatureDeclaration(d))).flatten();
+		var declarations = symbols.map(s -> getDeclarationsArray(s).filter(d -> Typescript.isConstructSignatureDeclaration(d))).flatten();
 		var signatures = declarations.map(d -> tc.getSignatureFromDeclaration(cast d));
 		return cast signatures.filter(s -> s != null);
 	}
 
 	static public function getIndexSignatures(symbol: Symbol, tc: TypeChecker): Array<Signature> {
 		var symbols = getMembers(symbol).filter(s -> s.flags & SymbolFlags.Signature != 0 && s.escapedName == InternalSymbolName.Index);
-		var declarations = symbols.map(s -> getDeclarationsArray(s).filter(d -> Ts.isIndexSignatureDeclaration(d))).flatten();
+		var declarations = symbols.map(s -> getDeclarationsArray(s).filter(d -> Typescript.isIndexSignatureDeclaration(d))).flatten();
 		var signatures = declarations.map(d -> tc.getSignatureFromDeclaration(cast d));
 		return cast signatures.filter(s -> s != null);
 	}
@@ -303,7 +303,7 @@ class TsSymbolTools {
 	**/
 	static public function getConstructorSignatures(symbol: Symbol, tc: TypeChecker): Array<Signature> {
 		var symbols = getMembers(symbol).filter(s -> s.flags & SymbolFlags.Constructor != 0 && s.escapedName == InternalSymbolName.Constructor);
-		var declarations = symbols.map(s -> getDeclarationsArray(s).filter(d -> Ts.isConstructorDeclaration(d))).flatten();
+		var declarations = symbols.map(s -> getDeclarationsArray(s).filter(d -> Typescript.isConstructorDeclaration(d))).flatten();
 		var signatures = declarations.map(d -> tc.getSignatureFromDeclaration(cast d));
 		return cast signatures.filter(s -> s != null);
 	}
@@ -333,11 +333,11 @@ class TsSymbolTools {
 		for (declaration in typeDeclarations) {
 			// find the first declaration with more than 0 type parameters
 			// here we make the assumption that all declarations have the same type parameters
-			var declarationTypeParameters = Ts.getEffectiveTypeParameterDeclarations(cast declaration);
+			var declarationTypeParameters = Typescript.getEffectiveTypeParameterDeclarations(cast declaration);
 
 			// not all declarations will have the same number of type-parameters, use the one with the longest
 			if (declarationTypeParameters.length > 0 && declarationTypeParameters.length > tsTypeParameterDeclarations.length) {
-				tsTypeParameterDeclarations = declarationTypeParameters;
+				tsTypeParameterDeclarations = (cast declarationTypeParameters : Array<typescript.TypeParameterDeclaration>);
 			}
 
 		}

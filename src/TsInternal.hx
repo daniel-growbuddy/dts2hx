@@ -1,20 +1,20 @@
-import typescript.ts.ModifiersArray;
-import typescript.ts.SignatureDeclaration;
+import typescript.ModifiersArray;
+import typescript.SignatureDeclaration;
 import js.Syntax;
-import typescript.ts.Signature;
-import typescript.ts.Identifier;
-import typescript.ts.StringLiteral;
-import typescript.ts.SymbolTable;
-import typescript.ts.TypeParameter;
-import typescript.ts.Node;
-import typescript.ts.FileReference;
-import typescript.ts.Program;
-import typescript.ts.SourceFile;
-import typescript.ts.Symbol;
-import typescript.ts.TypeChecker;
-import typescript.Ts;
+import typescript.Signature;
+import typescript.Identifier;
+import typescript.StringLiteral;
+import typescript.SymbolTable;
+import typescript.TypeParameter;
+import typescript.Node;
+import typescript.FileReference;
+import typescript.Program;
+import typescript.SourceFile;
+import typescript.Symbol;
+import typescript.TypeChecker;
+import Typescript;
 
-private typedef TsType = typescript.ts.Type;
+private typedef TsType = typescript.Type_;
 
 /**
 	TypeScript compiler methods not included in the compiler externs

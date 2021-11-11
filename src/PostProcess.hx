@@ -1,4 +1,4 @@
-import typescript.ts.SymbolFlags;
+import typescript.SymbolFlags;
 using Lambda;
 using StringTools;
 using SupportTypes;

@@ -8,10 +8,10 @@ import js.Node;
 import js.node.Fs;
 import tool.FileTools;
 import tool.TsProgramTools;
-import typescript.Ts;
-import typescript.ts.CompilerOptions;
-import typescript.ts.ModuleResolutionKind;
-import typescript.ts.ResolvedModuleFull;
+import Typescript;
+import typescript.CompilerOptions;
+import typescript.ModuleResolutionKind;
+import typescript.ResolvedModuleFull;
 
 using Lambda;
 using StringTools;
@@ -274,7 +274,7 @@ class Main {
 			cliOptions.globalPackageName = null;
 		}
 
-		var defaultCompilerOptions = Ts.getDefaultCompilerOptions();
+		var defaultCompilerOptions = Typescript.getDefaultCompilerOptions();
 		defaultCompilerOptions.target = ES2015; // default to ES6 for lib types
 		defaultCompilerOptions.types = []; // disable automatic node_modules/@types inclusion
 		defaultCompilerOptions.moduleResolution = ModuleResolutionKind.NodeJs;
@@ -286,10 +286,10 @@ class Main {
 
 		// add options from --tsconfig
 		if (cliOptions.tsConfigFilePath != null) {
-			var readResult = Ts.readConfigFile(cliOptions.tsConfigFilePath, (path) -> Ts.sys.readFile(path, 'utf8'));
+			var readResult = Typescript.readConfigFile(cliOptions.tsConfigFilePath, (path) -> Typescript.sys.readFile(path, 'utf8'));
 			if (readResult.config != null) {
 				var compilerOptionsObj = Reflect.field(readResult.config, 'compilerOptions');
-				var result = Ts.convertCompilerOptionsFromJson(compilerOptionsObj, Node.process.cwd(), cliOptions.tsConfigFilePath);
+				var result = Typescript.convertCompilerOptionsFromJson(compilerOptionsObj, Node.process.cwd(), cliOptions.tsConfigFilePath);
 				Log.diagnostics(result.errors);
 
 				compilerOptions = extend(compilerOptions, result.options);
@@ -302,12 +302,12 @@ class Main {
 
 		// add user-supplied typescript compiler options
 		if (cliOptions.tsCompilerOptions.length > 0) {
-			var result = Ts.parseCommandLine(cliOptions.tsCompilerOptions);
+			var result = Typescript.parseCommandLine(cliOptions.tsCompilerOptions);
 			Log.diagnostics(result.errors);
 			compilerOptions = extend(compilerOptions, result.options);
 		}
 
-		var host = Ts.createCompilerHost(compilerOptions);
+		var host = Typescript.createCompilerHost(compilerOptions);
 
 		// add package.json dependencies to list of modules
 		if (cliOptions.allDependencies) {
@@ -326,7 +326,7 @@ class Main {
 
 				// check if module has typescript
 				for (moduleName in allDependencies) {
-					var result = Ts.resolveModuleName(moduleName, cliOptions.moduleSearchPath + '/.', compilerOptions, host);
+					var result = Typescript.resolveModuleName(moduleName, cliOptions.moduleSearchPath + '/.', compilerOptions, host);
 					if (result.resolvedModule != null) {
 						switch result.resolvedModule.extension {
 							case Dts, Ts, Tsx: // maybe we should limit to just Dts
@@ -353,7 +353,7 @@ class Main {
 		}
 		
 		// add modules from compilerOptions
-		for (moduleName in Ts.getAutomaticTypeDirectiveNames(compilerOptions, host)) {
+		for (moduleName in Typescript.getAutomaticTypeDirectiveNames(compilerOptions, host)) {
 			moduleQueue.tryEnqueue(moduleName);
 		}
 
@@ -502,7 +502,7 @@ class Main {
 		sections.push('# Haxe Externs for ${converter.packageName != null ? converter.packageName : converter.normalizedInputModuleName}');
 
 		sections.push('
-			Generated from **$typesModuleIdMarkdown** by **$dts2hxRef ${dts2hxPackageJson.version}** using **TypeScript ${typescript.Ts.version}** with arguments:
+			Generated from **$typesModuleIdMarkdown** by **$dts2hxRef ${dts2hxPackageJson.version}** using **TypeScript ${Typescript.version}** with arguments:
 
 				dts2hx ${Node.process.argv.slice(2).join(' ')}
 		');
@@ -595,7 +595,7 @@ class Main {
 	}
 
 	static function printDoc(argHandler: ArgHandler) {
-		Console.printlnFormatted('<b>dts2hx</b> <b>${dts2hxPackageJson.version}</> <red>alpha</> using <b>TypeScript ${typescript.Ts.version}</>');
+		Console.printlnFormatted('<b>dts2hx</b> <b>${dts2hxPackageJson.version}</> <red>alpha</> using <b>TypeScript ${Typescript.version}</>');
 		Console.println('TypeScript definition to haxe extern converter');
 		Console.println('');
 		Console.printlnFormatted('<b>Usage:</b>');

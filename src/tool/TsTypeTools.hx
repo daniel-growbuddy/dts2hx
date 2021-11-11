@@ -1,16 +1,16 @@
 package tool;
 
-import typescript.ts.UnionType;
-import typescript.ts.ObjectFlags;
-import typescript.ts.TypeFlags;
-import typescript.ts.ObjectType;
-import typescript.ts.TupleTypeReference;
-import typescript.ts.TypeChecker;
+import typescript.UnionType;
+import typescript.ObjectFlags;
+import typescript.TypeFlags;
+import typescript.ObjectType;
+import typescript.TupleTypeReference;
+import typescript.TypeChecker;
 
 using Lambda;
 using TsInternal;
 
-private typedef TsType = typescript.ts.Type;
+private typedef TsType = typescript.Type_;
 
 class TsTypeTools {
 
@@ -36,7 +36,7 @@ class TsTypeTools {
 		return activeFlags;
 	}
 
-	public static function getObjectFlagsInfo(type: typescript.ts.ObjectType, compositeFlags: Bool = false): Array<String> {
+	public static function getObjectFlagsInfo(type: typescript.ObjectType, compositeFlags: Bool = false): Array<String> {
 		var activeFlags = new Array<String>();
 
 		for (key => value in getObjectFlagsMap()) {
@@ -99,13 +99,13 @@ class TsTypeTools {
 	/** Translated from checker.ts (typescript 3.7.4) **/
 	public static function getRestTypeOfTupleType(tc: TypeChecker, type: TupleTypeReference): Null<TsType> {
 		// return type.target.hasRestElement ? getTypeArguments(type)[type.target.typeParameters!.length - 1] : undefined;
-		return type.target.hasRestElement() ? tc.getTypeArguments(type)[type.target.typeParameters.length - 1] : null;
+		return (type.target.hasRestElement ? tc.getTypeArguments(type)[type.target.typeParameters.length - 1] : null);
 	}
 
 	public static function getIndexSignaturesOfType(tc: TypeChecker, type: TsType) {
-		var indexDeclarations = new Array<typescript.ts.IndexSignatureDeclaration>();
-		var numberInfo = tc.getIndexInfoOfType(type, typescript.ts.IndexKind.Number);
-		var stringInfo = tc.getIndexInfoOfType(type, typescript.ts.IndexKind.String);
+		var indexDeclarations = new Array<typescript.IndexSignatureDeclaration>();
+		var numberInfo = tc.getIndexInfoOfType(type, typescript.IndexKind.Number);
+		var stringInfo = tc.getIndexInfoOfType(type, typescript.IndexKind.String);
 		if (numberInfo != null && numberInfo.declaration != null) indexDeclarations.push(numberInfo.declaration);
 		if (stringInfo != null && stringInfo.declaration != null) indexDeclarations.push(stringInfo.declaration);
 		return indexDeclarations.map(d -> cast tc.getSignatureFromDeclaration(d));

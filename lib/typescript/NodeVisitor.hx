@@ -1,0 +1,3 @@
+package typescript;
+
+typedef NodeVisitor = ts.AnyOf6<(nodes:Any, visitor:Null<Visitor>) -> Any, (nodes:Any, visitor:Null<Visitor>, test:(node:Node) -> Bool) -> Any, (nodes:Any, visitor:Null<Visitor>, test:(node:Node) -> Bool, lift:(node:NodeArray<Node>) -> Any) -> Any, (nodes:Null<Any>, visitor:Null<Visitor>) -> Null<Any>, (nodes:Null<Any>, visitor:Null<Visitor>, test:(node:Node) -> Bool) -> Null<Any>, (nodes:Null<Any>, visitor:Null<Visitor>, test:(node:Node) -> Bool, lift:(node:NodeArray<Node>) -> Any) -> Null<Any>>;

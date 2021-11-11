@@ -1,17 +1,17 @@
 import tool.TsSymbolTools;
 import tool.TsSyntaxTools;
-import typescript.Ts;
-import typescript.ts.Symbol;
-import typescript.ts.Diagnostic;
-import typescript.ts.SourceFile;
-import typescript.ts.Node;
-import typescript.ts.SyntaxKind;
+import Typescript;
+import typescript.Symbol;
+import typescript.Diagnostic;
+import typescript.SourceFile;
+import typescript.Node;
+import typescript.SyntaxKind;
 
 using tool.TsTypeTools;
 
 // avoid node.js `Node`
-private typedef TsNode = typescript.ts.Node;
-private typedef TsType = typescript.ts.Type;
+private typedef TsNode = typescript.Node;
+private typedef TsType = typescript.Type_;
 
 enum abstract LogLevel(Int) to Int {
 	var None = 0;
@@ -128,7 +128,7 @@ class Log {
 			parts.push('<dim>(${typeInfo(type)})</>');
 		}
 		if (diagnostic != null) {
-			var message = '<b>[TypeScript ${Ts.versionMajorMinor}]</> ${diagnostic.messageText}';
+			var message = '<b>[TypeScript ${Typescript.versionMajorMinor}]</> ${diagnostic.messageText}';
 			if (diagnostic.file != null) {
 				message += ' <dim>(${formatLocation({
 					sourceFile: diagnostic.file,

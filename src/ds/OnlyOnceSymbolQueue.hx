@@ -1,6 +1,6 @@
 package ds;
 
-import typescript.ts.Symbol;
+import typescript.Symbol;
 
 using tool.TsSymbolTools;
 

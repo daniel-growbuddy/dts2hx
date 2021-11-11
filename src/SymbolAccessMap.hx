@@ -1,11 +1,11 @@
-import typescript.ts.CompilerHost;
+import typescript.CompilerHost;
 import SymbolAccess;
-import typescript.ts.InternalSymbolName;
-import typescript.ts.Program;
-import typescript.ts.SourceFile;
-import typescript.ts.Symbol;
-import typescript.ts.SymbolFlags;
-import typescript.ts.TypeChecker;
+import typescript.InternalSymbolName;
+import typescript.Program;
+import typescript.SourceFile;
+import typescript.Symbol;
+import typescript.SymbolFlags;
+import typescript.TypeChecker;
 
 using tool.SymbolAccessTools;
 using tool.TsProgramTools;

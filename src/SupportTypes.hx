@@ -1,4 +1,4 @@
-import typescript.ts.Symbol;
+import typescript.Symbol;
 import haxe.macro.Expr;
 
 using StringTools;

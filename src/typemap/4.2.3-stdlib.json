@@ -2050,6 +2050,17 @@
 			"typeParameters": [],
 			"isExtern": true
 		},
+		"PromiseSettleStatus": {
+			"name": "PromiseSettleStatus",
+			"moduleType": 3,
+			"moduleName": "Promise",
+			"pack": [
+				"js",
+				"lib"
+			],
+			"typeParameters": [],
+			"isExtern": false
+		},
 		"SpeechRecognitionAlternative": {
 			"name": "SpeechRecognitionAlternative",
 			"moduleType": 0,
@@ -2479,6 +2490,17 @@
 			"typeParameters": [],
 			"isExtern": true
 		},
+		"PromiseSettleOutcome": {
+			"name": "PromiseSettleOutcome",
+			"moduleType": 2,
+			"moduleName": "Promise",
+			"pack": [
+				"js",
+				"lib"
+			],
+			"typeParameters": [],
+			"isExtern": false
+		},
 		"WebAssembly.TableKind": {
 			"name": "TableKind",
 			"moduleType": 3,
@@ -2808,6 +2830,19 @@
 			"typeParameters": [],
 			"isExtern": true
 		},
+		"HaxeIterator": {
+			"name": "HaxeIterator",
+			"moduleType": 0,
+			"moduleName": "HaxeIterator",
+			"pack": [
+				"js",
+				"lib"
+			],
+			"typeParameters": [
+				"T"
+			],
+			"isExtern": false
+		},
 		"TextTrackKind": {
 			"name": "TextTrackKind",
 			"moduleType": 3,
@@ -2864,6 +2899,20 @@
 				"intl"
 			],
 			"typeParameters": [],
+			"isExtern": false
+		},
+		"KeyValue": {
+			"name": "KeyValue",
+			"moduleType": 3,
+			"moduleName": "KeyValue",
+			"pack": [
+				"js",
+				"lib"
+			],
+			"typeParameters": [
+				"K",
+				"V"
+			],
 			"isExtern": false
 		},
 		"TextDecodeOptions": {
@@ -4347,20 +4396,6 @@
 				"html"
 			],
 			"typeParameters": [],
-			"isExtern": false
-		},
-		"MapEntry": {
-			"name": "MapEntry",
-			"moduleType": 3,
-			"moduleName": "Map",
-			"pack": [
-				"js",
-				"lib"
-			],
-			"typeParameters": [
-				"K",
-				"V"
-			],
 			"isExtern": false
 		},
 		"FileMode": {
@@ -6695,6 +6730,19 @@
 			"typeParameters": [],
 			"isExtern": true
 		},
+		"AsyncIterator": {
+			"name": "AsyncIterator",
+			"moduleType": 2,
+			"moduleName": "Iterator",
+			"pack": [
+				"js",
+				"lib"
+			],
+			"typeParameters": [
+				"T"
+			],
+			"isExtern": false
+		},
 		"SVGAnimateElement": {
 			"name": "AnimateElement",
 			"moduleType": 0,
@@ -7969,6 +8017,19 @@
 			],
 			"typeParameters": [],
 			"isExtern": true
+		},
+		"SetKeyValueIterator": {
+			"name": "SetKeyValueIterator",
+			"moduleType": 0,
+			"moduleName": "Set",
+			"pack": [
+				"js",
+				"lib"
+			],
+			"typeParameters": [
+				"T"
+			],
+			"isExtern": false
 		},
 		"WebGLProgram": {
 			"name": "Program",

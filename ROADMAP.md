@@ -154,7 +154,7 @@ A generic build version of this would work
 
 **haxe on npm**
 - npm haxe version should exactly always match haxe compiler version
-	- e.g. `npm install haxe 4.0.5` should do exactly that
+	- e.g. `npm install haxe 4.2.3` should do exactly that
 	- Should include prebuilt binaries / download based on arch after install
 	- This is annoying because we can never reuse the same name/version on npm (may need to get in touch with npm admins?)
 		- We can unpublish specific old versions by contacting `support@npmjs.com` and replace them with a shim to new version so they will still work
@@ -183,6 +183,6 @@ A generic build version of this would work
 	=> What if we scan the dependencies for hx files, then cache the results in a text file so we know if we need to re-run this process
 	
 
-- How do you install haxe 4.0.5 with npm-haxe? Not clear so far
+- How do you install haxe 4.2.3 with npm-haxe? Not clear so far
 
 - Binaries should be hosted on npm, so for example `npm install haxe` on mac installs `@haxe/haxec-darwin@4.2.0` as a dependency

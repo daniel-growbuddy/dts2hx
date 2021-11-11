@@ -47,7 +47,7 @@ typedef CliOptions = {
 class Main {
 
 	static public final dts2hxPackageJson = Macro.getJson('package.json');
-	static final defaultStdLibTypeMap: TypeMap = Macro.getJson('src/typemap/4.0.5-stdlib.json');
+	static final defaultStdLibTypeMap: TypeMap = Macro.getJson('src/typemap/4.2.3-stdlib.json');
 
 	static function main() {
 		Console.warnPrefix = '<b,yellow>> Warning:</b> ';
